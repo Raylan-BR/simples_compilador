@@ -17,33 +17,35 @@ public class Scanner {
         current++;
         }
     }
-    public String nextToken () {
+    public Token nextToken () {
         char ch = peek();
         if (ch == '0') {
             advance();
-            return Character.toString(ch);
+            return new Token (TokenType.NUMBER, Character.toString(ch));
         }  else if (Character.isDigit(ch))
             return number();
 
         switch (ch) {
-            case '+':
-            case '-':
-                advance();
-                return Character.toString(ch);
-            default:
-                break;
+                case '+':
+                    advance();
+                    return new Token (TokenType.PLUS,"+");
+                case '-':
+                    advance();
+                    return new Token (TokenType.MINUS,"-");
+                case '\0':
+                    return new Token (TokenType.EOF,"EOF");
+                default:
+                     throw new Error("lexical error at " + ch);
         }
-
-        throw new Error("lexical error");
     }
-    private String number() {
-        int start = current ;
-        while (Character.isDigit(peek())) {
-            advance();
-        }
-        
-        String n = new String(input, start, current-start)  ;
-        return n;
-  }
 
+    private Token number() {
+            int start = current ;
+            while (Character.isDigit(peek())) {
+                advance();
+            }
+            
+            String n = new String(input, start, current-start)  ;
+            return new Token(TokenType.NUMBER, n);
+        }
 }
