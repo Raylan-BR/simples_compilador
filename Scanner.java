@@ -17,24 +17,33 @@ public class Scanner {
         current++;
         }
     }
-    public char nextToken () {
+    public String nextToken () {
         char ch = peek();
-
-        if (Character.isDigit(ch)) {
-						advance();
-            return ch;
-        }
+        if (ch == '0') {
+            advance();
+            return Character.toString(ch);
+        }  else if (Character.isDigit(ch))
+            return number();
 
         switch (ch) {
             case '+':
             case '-':
                 advance();
-                return ch;
+                return Character.toString(ch);
             default:
                 break;
         }
 
-        return '\0';
+        throw new Error("lexical error");
     }
+    private String number() {
+        int start = current ;
+        while (Character.isDigit(peek())) {
+            advance();
+        }
+        
+        String n = new String(input, start, current-start)  ;
+        return n;
+  }
 
 }
