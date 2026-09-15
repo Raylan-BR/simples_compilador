@@ -2,6 +2,7 @@ class Parser {
     
     private Scanner scan;
     private Token currentToken;
+    private StringBuilder out = new StringBuilder();
 
     public Parser(byte[] input) {
         scan = new Scanner(input);
@@ -19,7 +20,8 @@ class Parser {
         }
    }
     void number () {
-        System.out.println("push " + currentToken.lexeme);
+        out.append("push " + currentToken.lexeme).append(System.lineSeparator());
+        //System.out.println("push " + currentToken.lexeme);
         match(TokenType.NUMBER);
     }
     void expr() {
@@ -31,12 +33,14 @@ class Parser {
         if (currentToken.type == TokenType.PLUS) {
             match(TokenType.PLUS);
             term();
-            System.out.println("add");
+            out.append("add").append(System.lineSeparator());
+            //System.out.println("add");
             oper();
         } else if (currentToken.type == TokenType.MINUS) {
             match(TokenType.MINUS);
             term();
-            System.out.println("sub");
+            out.append("sub").append(System.lineSeparator());
+            //System.out.println("sub");
             oper();
         } 
     }
@@ -45,7 +49,8 @@ class Parser {
         if (currentToken.type == TokenType.NUMBER)
             number();
         else if (currentToken.type == TokenType.IDENT) {
-            System.out.println("push "+currentToken.lexeme);
+            out.append("push "+currentToken.lexeme).append(System.lineSeparator());
+            //System.out.println("push "+currentToken.lexeme);
             match(TokenType.IDENT);
         }
         else
@@ -62,14 +67,16 @@ class Parser {
         match(TokenType.IDENT);
         match(TokenType.EQ);
         expr();
-        System.out.println("pop "+id);
+        out.append("pop "+id).append(System.lineSeparator());        
+        //System.out.println("pop "+id);
         match(TokenType.SEMICOLON);
     }
 
     void printStatement () {
         match(TokenType.PRINT);
         expr();
-        System.out.println("print");
+        out.append("print").append(System.lineSeparator()); 
+        //System.out.println("print");
         match(TokenType.SEMICOLON);
     }
 
@@ -87,5 +94,9 @@ class Parser {
         while (currentToken.type != TokenType.EOF) {
             statement();
         }
+    }
+
+    String output () {
+        return out.toString();
     }
 }
